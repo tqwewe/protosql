@@ -7,7 +7,7 @@ use clap::{AppSettings, Clap};
 #[derive(Clap, Debug)]
 #[clap(
     name = "protosql",
-    version = "1.0",
+    // version = "1.0",
     author = "Ari Seyhun <ariseyhun@live.com.au>"
 )]
 #[clap(setting = AppSettings::ColoredHelp)]
@@ -16,9 +16,9 @@ pub struct Protosql {
     #[clap(short, long)]
     pub uri: String,
 
-    /// Postgres schema
-    #[clap(short, long, default_value = "public")]
-    pub schema: String,
+    /// Postgres schema. Uses proto's package field if omitted, or 'public' if no package was found in the proto file
+    #[clap(short, long)]
+    pub schema: Option<String>,
 
     /// Postgres database table name
     #[clap(short, long)]

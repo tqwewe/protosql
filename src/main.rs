@@ -96,6 +96,13 @@ async fn verify_file(path: impl AsRef<Path>, opts: &Protosql) -> Result<bool> {
     let message = find_proto_message(&proto, &message_name)?;
     info!("found message '{}'", message_name);
 
+    let schema = opts.schema.as_deref().unwrap_or_else(|| {
+        proto
+            .package
+            .as_ref()
+            .map(|package| package.as_ref())
+            .unwrap_or("public")
+    });
     let table_name = opts.table.clone().unwrap_or_else(|| {
         let file_name = file_name.file_name().unwrap().to_string_lossy();
         let table_name = file_name.split('.').next().unwrap();
@@ -104,18 +111,17 @@ async fn verify_file(path: impl AsRef<Path>, opts: &Protosql) -> Result<bool> {
         }
         table_name.to_string()
     });
-    let table_columns =
-        schema::discover_table_columns(&opts.uri, &opts.schema, &table_name).await?;
+    let table_columns = schema::discover_table_columns(&opts.uri, schema, &table_name).await?;
     info!("connected to database");
 
     if table_columns.is_empty() {
-        warn!("table {}.{} has no columns", opts.schema, table_name);
+        warn!("table {}.{} has no columns", schema, table_name);
         std::process::exit(2);
     }
     info!(
         "found {} columns on table {}.{}",
         table_columns.len(),
-        opts.schema,
+        schema,
         table_name
     );
 
