@@ -1,5 +1,3 @@
-# ProtoSQL
-
 <h1 align="center">ProtoSQL</h1>
 
 <div align="center">
