@@ -1,0 +1,18 @@
+[package]
+name = "protosql"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+anyhow = "1.0"
+clap = "3.0.0-beta.4"
+colorful = "0.2"
+heck = "0.3"
+log = { version = "0.4", features = ["std"] }
+protobuf-parser = { path = "protobuf-parser" }
+sea-schema = { version = "0.2", features = ["sqlx-postgres", "discovery", "def"] }
+sqlx = { version = "0.5", features = ["mysql", "postgres", "runtime-tokio-rustls"] }
+tokio = { version = "1", features = ["fs", "macros", "rt", "rt-multi-thread"] }
+
+[workspace]
+members = ["protobuf-parser"]
